@@ -14,7 +14,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #CE1126 0%, #FCD116 50%, #009460 100%);
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -25,14 +25,49 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #CE1126 0%, #FCD116 50%, #009460 100%);
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.85) 0%, rgba(252, 209, 22, 0.85) 50%, rgba(0, 148, 96, 0.85) 100%);
             color: white;
-            padding: 40px;
+            padding: 50px 40px;
             border-radius: 20px;
             margin-bottom: 30px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             animation: slideDown 0.8s ease;
+            position: relative;
+        }
+        
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .logo-placeholder {
+            font-size: 0.7em;
+            color: #666;
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.2;
         }
         
         @keyframes slideDown {
@@ -66,20 +101,21 @@
         
         .guinea-flag {
             display: flex;
-            height: 8px;
-            margin: 20px 0;
-            border-radius: 4px;
+            height: 6px;
+            margin: 20px auto;
+            border-radius: 3px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            max-width: 300px;
         }
         
         .guinea-flag div {
             flex: 1;
         }
         
-        .flag-red { background: #CE1126; }
-        .flag-yellow { background: #FCD116; }
-        .flag-green { background: #009460; }
+        .flag-red { background: rgba(206, 17, 38, 0.8); }
+        .flag-yellow { background: rgba(252, 209, 22, 0.8); }
+        .flag-green { background: rgba(0, 148, 96, 0.8); }
         
         .section {
             background: white;
@@ -108,13 +144,13 @@
         }
         
         .section h2 {
-            background: linear-gradient(90deg, #CE1126 0%, #FCD116 50%, #009460 100%);
+            background: linear-gradient(90deg, rgba(206, 17, 38, 0.7) 0%, rgba(252, 209, 22, 0.7) 50%, rgba(0, 148, 96, 0.7) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             font-size: 2em;
-            border-bottom: 4px solid;
-            border-image: linear-gradient(90deg, #CE1126, #FCD116, #009460) 1;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, rgba(206, 17, 38, 0.5), rgba(252, 209, 22, 0.5), rgba(0, 148, 96, 0.5)) 1;
             padding-bottom: 15px;
             margin-bottom: 25px;
         }
@@ -127,12 +163,12 @@
         }
         
         .stat-card {
-            background: linear-gradient(135deg, #CE1126 0%, #FCD116 100%);
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.85) 0%, rgba(252, 209, 22, 0.85) 100%);
             color: white;
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(206, 17, 38, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
@@ -146,7 +182,7 @@
             right: -50%;
             width: 200%;
             height: 200%;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.08);
             transform: rotate(45deg);
             transition: all 0.5s ease;
         }
@@ -157,20 +193,20 @@
         }
         
         .stat-card:nth-child(2) {
-            background: linear-gradient(135deg, #FCD116 0%, #009460 100%);
+            background: linear-gradient(135deg, rgba(252, 209, 22, 0.85) 0%, rgba(0, 148, 96, 0.85) 100%);
         }
         
         .stat-card:nth-child(3) {
-            background: linear-gradient(135deg, #009460 0%, #CE1126 100%);
+            background: linear-gradient(135deg, rgba(0, 148, 96, 0.85) 0%, rgba(206, 17, 38, 0.85) 100%);
         }
         
         .stat-card:nth-child(4) {
-            background: linear-gradient(135deg, #CE1126 0%, #009460 100%);
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.85) 0%, rgba(0, 148, 96, 0.85) 100%);
         }
         
         .stat-card:hover {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
         .stat-card h3 {
@@ -218,14 +254,14 @@
         }
         
         .chart-wrapper:hover {
-            border-color: #CE1126;
+            border-color: rgba(206, 17, 38, 0.5);
             transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(206, 17, 38, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
         
         .chart-wrapper h3 {
             text-align: center;
-            background: linear-gradient(90deg, #CE1126, #FCD116, #009460);
+            background: linear-gradient(90deg, rgba(206, 17, 38, 0.7), rgba(252, 209, 22, 0.7), rgba(0, 148, 96, 0.7));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -250,7 +286,7 @@
         }
         
         th {
-            background: linear-gradient(135deg, #CE1126 0%, #009460 100%);
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.85) 0%, rgba(0, 148, 96, 0.85) 100%);
             color: white;
             font-weight: bold;
             text-transform: uppercase;
@@ -623,7 +659,75 @@
         </div>
 
         <div class="section">
-            <h2>✍️ VIII. CERTIFICATION</h2>
+            <h2>💬 VIII. ESPACE D'APPRÉCIATION DE LA CENTRALE</h2>
+            
+            <div style="background: linear-gradient(135deg, rgba(206, 17, 38, 0.05), rgba(252, 209, 22, 0.05)); padding: 25px; border-radius: 15px; border: 2px dashed #CE1126; margin: 20px 0;">
+                <h3 style="color: #CE1126; margin-bottom: 15px;">📝 Avis et Observations de la Centrale</h3>
+                
+                <div style="margin: 20px 0;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #009460;">✅ Appréciation générale :</label>
+                    <textarea id="appreciation" 
+                              style="width: 100%; min-height: 120px; padding: 15px; border: 2px solid #FCD116; border-radius: 10px; font-size: 1em; font-family: inherit; resize: vertical;"
+                              placeholder="Excellent rapport | Satisfaisant | À améliorer | Autre appréciation..."></textarea>
+                </div>
+
+                <div style="margin: 20px 0;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #009460;">💡 Recommandations de la Centrale :</label>
+                    <textarea id="recommandations" 
+                              style="width: 100%; min-height: 100px; padding: 15px; border: 2px solid #FCD116; border-radius: 10px; font-size: 1em; font-family: inherit; resize: vertical;"
+                              placeholder="Vos recommandations et suggestions pour la section..."></textarea>
+                </div>
+
+                <div style="margin: 20px 0;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #009460;">⭐ Note globale :</label>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 5px;" id="rating">
+                            <span class="star" data-value="1" style="font-size: 2.5em; cursor: pointer; color: #ddd; transition: all 0.3s;">★</span>
+                            <span class="star" data-value="2" style="font-size: 2.5em; cursor: pointer; color: #ddd; transition: all 0.3s;">★</span>
+                            <span class="star" data-value="3" style="font-size: 2.5em; cursor: pointer; color: #ddd; transition: all 0.3s;">★</span>
+                            <span class="star" data-value="4" style="font-size: 2.5em; cursor: pointer; color: #ddd; transition: all 0.3s;">★</span>
+                            <span class="star" data-value="5" style="font-size: 2.5em; cursor: pointer; color: #ddd; transition: all 0.3s;">★</span>
+                        </div>
+                        <span id="ratingText" style="font-size: 1.2em; font-weight: bold; color: #CE1126;"></span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                    <div>
+                        <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #009460;">👤 Nom du validateur :</label>
+                        <input type="text" id="validateur" 
+                               style="width: 100%; padding: 12px; border: 2px solid #FCD116; border-radius: 8px; font-size: 1em;"
+                               placeholder="Nom et prénom">
+                    </div>
+                    <div>
+                        <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #009460;">💼 Fonction :</label>
+                        <input type="text" id="fonction" 
+                               style="width: 100%; padding: 12px; border: 2px solid #FCD116; border-radius: 8px; font-size: 1em;"
+                               placeholder="Ex: Trésorier Central">
+                    </div>
+                    <div>
+                        <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #009460;">📅 Date de validation :</label>
+                        <input type="date" id="dateValidation" 
+                               style="width: 100%; padding: 12px; border: 2px solid #FCD116; border-radius: 8px; font-size: 1em;">
+                    </div>
+                </div>
+
+                <div style="margin: 25px 0; text-align: center;">
+                    <button onclick="saveAppreciation()" 
+                            style="background: linear-gradient(135deg, #CE1126 0%, #009460 100%); color: white; padding: 15px 40px; border: none; border-radius: 50px; cursor: pointer; font-size: 1.1em; font-weight: bold; box-shadow: 0 5px 15px rgba(206, 17, 38, 0.3); transition: all 0.3s ease;">
+                        💾 Enregistrer l'Appréciation
+                    </button>
+                </div>
+
+                <div id="appreciationSaved" style="display: none; margin-top: 20px; padding: 20px; background: rgba(0, 148, 96, 0.1); border-left: 5px solid #009460; border-radius: 10px;">
+                    <h4 style="color: #009460; margin-bottom: 15px;">✅ APPRÉCIATION DE LA CENTRALE - VALIDÉE</h4>
+                    <div id="savedContent" style="line-height: 1.8;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✍️ IX. CERTIFICATION DU CAC</h2>
             <p style="text-align: justify; line-height: 1.9; font-size: 1.05em;">
                 Je soussigné <strong style="color: #CE1126;">MAMADOU CIRE DIALLO</strong>, Commissaire aux Comptes de la section régionale d'OUJDA, 
                 certifie que les informations contenues dans ce rapport sont exactes et conformes aux documents comptables 
@@ -766,6 +870,101 @@
             observer.observe(section);
         });
 
+        // Système de notation par étoiles
+        const stars = document.querySelectorAll('.star');
+        const ratingText = document.getElementById('ratingText');
+        let currentRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                currentRating = parseInt(this.dataset.value);
+                updateStars(currentRating);
+                updateRatingText(currentRating);
+            });
+
+            star.addEventListener('mouseenter', function() {
+                const hoverValue = parseInt(this.dataset.value);
+                updateStars(hoverValue);
+            });
+        });
+
+        document.getElementById('rating').addEventListener('mouseleave', function() {
+            updateStars(currentRating);
+        });
+
+        function updateStars(value) {
+            stars.forEach((star, index) => {
+                if (index < value) {
+                    star.style.color = '#FCD116';
+                    star.style.transform = 'scale(1.2)';
+                    star.style.textShadow = '0 0 10px rgba(252, 209, 22, 0.5)';
+                } else {
+                    star.style.color = '#ddd';
+                    star.style.transform = 'scale(1)';
+                    star.style.textShadow = 'none';
+                }
+            });
+        }
+
+        function updateRatingText(value) {
+            const texts = {
+                1: '⚠️ Insuffisant',
+                2: '📉 À améliorer',
+                3: '👍 Satisfaisant',
+                4: '✅ Très bien',
+                5: '🌟 Excellent'
+            };
+            ratingText.textContent = texts[value] || '';
+            ratingText.style.color = value >= 4 ? '#009460' : value >= 3 ? '#FCD116' : '#CE1126';
+        }
+
+        // Sauvegarder l'appréciation
+        function saveAppreciation() {
+            const appreciation = document.getElementById('appreciation').value;
+            const recommandations = document.getElementById('recommandations').value;
+            const validateur = document.getElementById('validateur').value;
+            const fonction = document.getElementById('fonction').value;
+            const dateValidation = document.getElementById('dateValidation').value;
+
+            if (!appreciation || !validateur || !fonction || !dateValidation) {
+                alert('⚠️ Veuillez remplir tous les champs obligatoires (Appréciation, Validateur, Fonction, Date)');
+                return;
+            }
+
+            if (currentRating === 0) {
+                alert('⚠️ Veuillez attribuer une note en cliquant sur les étoiles');
+                return;
+            }
+
+            const savedContent = `
+                <p><strong style="color: #CE1126;">Note globale :</strong> ${currentRating}/5 étoiles ${'⭐'.repeat(currentRating)}</p>
+                <p><strong style="color: #CE1126;">Appréciation générale :</strong><br>${appreciation}</p>
+                ${recommandations ? `<p><strong style="color: #CE1126;">Recommandations :</strong><br>${recommandations}</p>` : ''}
+                <p style="margin-top: 15px;"><strong style="color: #009460;">Validé par :</strong> ${validateur} - ${fonction}</p>
+                <p><strong style="color: #009460;">Date :</strong> ${new Date(dateValidation).toLocaleDateString('fr-FR', {day: 'numeric', month: 'long', year: 'numeric'})}</p>
+            `;
+
+            document.getElementById('savedContent').innerHTML = savedContent;
+            document.getElementById('appreciationSaved').style.display = 'block';
+
+            // Désactiver les champs après sauvegarde
+            document.getElementById('appreciation').disabled = true;
+            document.getElementById('recommandations').disabled = true;
+            document.getElementById('validateur').disabled = true;
+            document.getElementById('fonction').disabled = true;
+            document.getElementById('dateValidation').disabled = true;
+            stars.forEach(star => star.style.pointerEvents = 'none');
+
+            // Animation de confirmation
+            const appreciationDiv = document.getElementById('appreciationSaved');
+            appreciationDiv.style.animation = 'slideIn 0.5s ease';
+
+            alert('✅ Appréciation enregistrée avec succès ! Vous pouvez maintenant imprimer le rapport complet.');
+
+            // Scroll vers l'appréciation sauvegardée
+            appreciationDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
         // Effet de compteur animé
         function animateCounter(element) {
             const target = parseInt(element.textContent.replace(/[^0-9]/g, ''));
@@ -793,6 +992,10 @@
                     animateCounter(el);
                 }, 500);
             });
+
+            // Définir la date du jour par défaut
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateValidation').value = today;
         });
     </script>
 </body>
