@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport Trimestriel du CAC - Section OUJDA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #CE1126 0%, #FCD116 50%, #009460 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #CE1126 0%, #FCD116 50%, #009460 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideDown 0.8s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header h1 {
+            margin: 0 0 15px 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .header p {
+            margin: 8px 0;
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .guinea-flag {
+            display: flex;
+            height: 8px;
+            margin: 20px 0;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .guinea-flag div {
+            flex: 1;
+        }
+        
+        .flag-red { background: #CE1126; }
+        .flag-yellow { background: #FCD116; }
+        .flag-green { background: #009460; }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            animation: fadeIn 0.6s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section h2 {
+            background: linear-gradient(90deg, #CE1126 0%, #FCD116 50%, #009460 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2em;
+            border-bottom: 4px solid;
+            border-image: linear-gradient(90deg, #CE1126, #FCD116, #009460) 1;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #CE1126 0%, #FCD116 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(206, 17, 38, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+        
+        .stat-card:hover::before {
+            top: -100%;
+            right: -100%;
+        }
+        
+        .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, #FCD116 0%, #009460 100%);
+        }
+        
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, #009460 0%, #CE1126 100%);
+        }
+        
+        .stat-card:nth-child(4) {
+            background: linear-gradient(135deg, #CE1126 0%, #009460 100%);
+        }
+        
+        .stat-card:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .stat-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        
+        .stat-card .amount {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            animation: countUp 1s ease;
+        }
+        
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 35px;
+            margin: 35px 0;
+        }
+        
+        .chart-wrapper {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .chart-wrapper:hover {
+            border-color: #CE1126;
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(206, 17, 38, 0.2);
+        }
+        
+        .chart-wrapper h3 {
+            text-align: center;
+            background: linear-gradient(90deg, #CE1126, #FCD116, #009460);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s ease;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #CE1126 0%, #009460 100%);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: linear-gradient(90deg, rgba(206, 17, 38, 0.05), rgba(252, 209, 22, 0.05), rgba(0, 148, 96, 0.05));
+            transform: scale(1.01);
+        }
+        
+        .positive {
+            color: #009460;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.1), rgba(252, 209, 22, 0.1));
+            border-left: 5px solid #CE1126;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .print-btn {
+            background: linear-gradient(135deg, #CE1126 0%, #009460 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 25px auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(206, 17, 38, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .print-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(206, 17, 38, 0.4);
+            background: linear-gradient(135deg, #009460 0%, #CE1126 100%);
+        }
+        
+        .print-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        ul li {
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #CE1126;
+            background: linear-gradient(90deg, rgba(206, 17, 38, 0.05), transparent);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        ul li:hover {
+            border-left-width: 8px;
+            padding-left: 20px;
+            background: linear-gradient(90deg, rgba(206, 17, 38, 0.1), rgba(252, 209, 22, 0.05));
+        }
+        
+        h3 {
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+        
+        .alert-success {
+            color: #009460;
+        }
+        
+        .alert-warning {
+            color: #FCD116;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+        }
+        
+        .alert-info {
+            color: #CE1126;
+        }
+        
+        .signature-box {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.05), rgba(0, 148, 96, 0.05));
+            border-radius: 15px;
+            border: 2px dashed #CE1126;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .print-btn {
+                display: none;
+            }
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇬🇳 RAPPORT TRIMESTRIEL DU CAC</h1>
+            <div class="guinea-flag">
+                <div class="flag-red"></div>
+                <div class="flag-yellow"></div>
+                <div class="flag-green"></div>
+            </div>
+            <p><strong>📍 Section Régionale : OUJDA</strong></p>
+            <p>👤 Commissaire aux Comptes : MAMADOU CIRE DIALLO</p>
+            <p>📅 1er Trimestre 2025 | Du 29 juin au 02 octobre 2025</p>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ Imprimer / Télécharger PDF</button>
+
+        <div class="section">
+            <h2>💰 I. RÉSUMÉ FINANCIER</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>💵 Solde Initial</h3>
+                    <p class="amount">596 Dhs</p>
+                </div>
+                <div class="stat-card">
+                    <h3>📈 Total Recettes</h3>
+                    <p class="amount">14 030 Dhs</p>
+                </div>
+                <div class="stat-card">
+                    <h3>📉 Total Dépenses</h3>
+                    <p class="amount">4 104 Dhs</p>
+                </div>
+                <div class="stat-card">
+                    <h3>💎 Solde Final</h3>
+                    <p class="amount">10 522 Dhs</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>📊 Performance exceptionnelle du trimestre :</strong> Le solde a été multiplié par <strong style="color: #009460; font-size: 1.3em;">17,6 fois</strong> durant ce trimestre, démontrant une excellente mobilisation financière et une gestion rigoureuse ! 🎉
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 II. GRAPHIQUES INTERACTIFS</h2>
+            <div class="charts-container">
+                <div class="chart-wrapper">
+                    <h3>🥧 Répartition des Recettes (14 030 Dhs)</h3>
+                    <canvas id="recettesChart"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>🍩 Répartition des Dépenses (4 104 Dhs)</h3>
+                    <canvas id="depensesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💵 III. DÉTAIL DES RECETTES</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Source</th>
+                        <th>Montant (Dhs)</th>
+                        <th>% du Total</th>
+                        <th>Observations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>R1</strong></td>
+                        <td>💳 Cotisations annuelles</td>
+                        <td class="positive">6 400</td>
+                        <td>45,6%</td>
+                        <td>57 membres à jour de cotisation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>R2</strong></td>
+                        <td>🎁 Dons des Aseguimiens</td>
+                        <td class="positive">900</td>
+                        <td>6,4%</td>
+                        <td>Contributions volontaires solidaires</td>
+                    </tr>
+                    <tr>
+                        <td><strong>R3</strong></td>
+                        <td>🎭 Préparation Journée Culturelle</td>
+                        <td class="positive">6 730</td>
+                        <td>48,0%</td>
+                        <td>Fonds collectés pour l'événement</td>
+                    </tr>
+                    <tr style="background: linear-gradient(90deg, rgba(206, 17, 38, 0.1), rgba(0, 148, 96, 0.1)); font-weight: bold; font-size: 1.1em;">
+                        <td colspan="2"><strong>✅ TOTAL RECETTES</strong></td>
+                        <td class="positive">14 030</td>
+                        <td>100%</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>💸 IV. DÉTAIL DES DÉPENSES</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Rubrique</th>
+                        <th>Montant (Dhs)</th>
+                        <th>% du Total</th>
+                        <th>Justificatif</th>
+                        <th>Observations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>D1</strong></td>
+                        <td>🤝 Réunions</td>
+                        <td>45</td>
+                        <td>1,1%</td>
+                        <td>✅ Oui</td>
+                        <td>Préparation Journée Culturelle</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D2</strong></td>
+                        <td>❤️ Aide sociale</td>
+                        <td>700</td>
+                        <td>17,1%</td>
+                        <td>✅ Oui</td>
+                        <td>Soutien étudiant en détresse</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D3</strong></td>
+                        <td>📋 Frais administratifs</td>
+                        <td>479</td>
+                        <td>11,7%</td>
+                        <td>✅ Oui</td>
+                        <td>Transport, poste, impression TDR</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D4</strong></td>
+                        <td>🏖️ Sortie à Saïdia</td>
+                        <td>2 079,50</td>
+                        <td>50,7%</td>
+                        <td>✅ Oui</td>
+                        <td>Activité récréative des membres</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D5</strong></td>
+                        <td>📚 Achat de livres JSC</td>
+                        <td>800</td>
+                        <td>19,5%</td>
+                        <td>✅ Oui</td>
+                        <td>Matériel pédagogique</td>
+                    </tr>
+                    <tr style="background: linear-gradient(90deg, rgba(206, 17, 38, 0.1), rgba(0, 148, 96, 0.1)); font-weight: bold; font-size: 1.1em;">
+                        <td colspan="2"><strong>✅ TOTAL DÉPENSES</strong></td>
+                        <td>4 103,50</td>
+                        <td>100%</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>👥 V. ANALYSE DES COTISATIONS</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>👨‍👩‍👧‍👦 Membres Total</h3>
+                    <p class="amount">67</p>
+                </div>
+                <div class="stat-card">
+                    <h3>✅ Membres à Jour</h3>
+                    <p class="amount">57</p>
+                </div>
+                <div class="stat-card">
+                    <h3>📊 Taux Participation</h3>
+                    <p class="amount">85%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>⏳ Reste à Collecter</h3>
+                    <p class="amount">1 000 Dhs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 VI. COMMENTAIRES ET ANALYSE</h2>
+            
+            <h3 class="alert-success">✅ Points Positifs</h3>
+            <ul>
+                <li><strong>💪 Excellente mobilisation financière</strong> : Le solde a été multiplié par 17 durant ce trimestre.</li>
+                <li><strong>👍 Forte participation aux cotisations</strong> : 85,1% des membres sont à jour, témoignant d'un engagement sérieux.</li>
+                <li><strong>🎯 Gestion prudente</strong> : Les dépenses (29,2% des recettes) démontrent une gestion rigoureuse.</li>
+                <li><strong>🌟 Diversification des ressources</strong> : Au-delà des cotisations, mobilisation de dons et fonds pour la JC.</li>
+                <li><strong>❤️ Solidarité active</strong> : Aide de 700 Dhs à un étudiant en détresse.</li>
+                <li><strong>📄 Transparence totale</strong> : Toutes les dépenses justifiées par des pièces comptables.</li>
+            </ul>
+
+            <h3 class="alert-warning">⚠️ Difficultés Rencontrées</h3>
+            <ul>
+                <li><strong>⏰ Retard de paiement</strong> : 10 membres (14,9%) n'ont pas finalisé leurs cotisations annuelles.</li>
+                <li><strong>🤝 Absence de sponsoring</strong> : Aucun partenariat établi avec des entreprises durant ce trimestre.</li>
+                <li><strong>📁 Documentation</strong> : Certains justificatifs nécessitent une meilleure organisation et classement.</li>
+                <li><strong>📊 Prévisibilité budgétaire</strong> : Absence d'un budget prévisionnel pour anticiper les besoins.</li>
+            </ul>
+
+            <h3 class="alert-info">💡 Recommandations Stratégiques</h3>
+            <ul>
+                <li><strong>📅 Court terme</strong> : Relance personnalisée des 10 membres en retard, finalisation réussie de la JC, numérisation des justificatifs.</li>
+                <li><strong>🎯 Moyen terme</strong> : Prospection de 3-5 sponsors locaux, élaboration d'un budget prévisionnel T2, constitution d'une réserve de sécurité (2 000 Dhs).</li>
+                <li><strong>🚀 Long terme</strong> : Plan stratégique triennal 2025-2027, objectif de 80 membres actifs d'ici fin 2025, autonomie financière progressive.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📎 VII. PIÈCES JUSTIFICATIVES ANNEXÉES</h2>
+            <ul style="border-left: 4px solid #009460;">
+                <li>📄 Annexe 1 : Liste nominative des 67 membres avec statut de cotisation</li>
+                <li>🧾 Annexe 2 : Reçus et factures des dépenses (D1 à D5)</li>
+                <li>💰 Annexe 3 : Justificatifs des recettes (R1 à R3)</li>
+                <li>🏦 Annexe 4 : Relevé de compte bancaire/caisse</li>
+                <li>📸 Annexe 5 : Photos de la sortie à Saïdia</li>
+                <li>📋 Annexe 6 : Copie des TDR imprimés</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>✍️ VIII. CERTIFICATION</h2>
+            <p style="text-align: justify; line-height: 1.9; font-size: 1.05em;">
+                Je soussigné <strong style="color: #CE1126;">MAMADOU CIRE DIALLO</strong>, Commissaire aux Comptes de la section régionale d'OUJDA, 
+                certifie que les informations contenues dans ce rapport sont exactes et conformes aux documents comptables 
+                en ma possession. Tous les mouvements financiers ont été effectués dans le respect des règles et procédures 
+                de l'organisation.
+            </p>
+            
+            <div class="signature-box">
+                <p style="margin-top: 20px; font-size: 1.1em;">
+                    <strong>📍 Fait à Oujda, le 06 octobre 2025</strong>
+                </p>
+                <br><br>
+                <p style="font-size: 1.2em;">
+                    <strong style="color: #CE1126;">✍️ Signature du CAC</strong><br><br>
+                    <strong style="font-size: 1.3em;">MAMADOU CIRE DIALLO</strong>
+                </p>
+                <br>
+                <div class="guinea-flag" style="width: 200px; margin: 20px auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Couleurs de la Guinée
+        const guineaColors = {
+            red: '#CE1126',
+            yellow: '#FCD116',
+            green: '#009460',
+            redLight: 'rgba(206, 17, 38, 0.8)',
+            yellowLight: 'rgba(252, 209, 22, 0.8)',
+            greenLight: 'rgba(0, 148, 96, 0.8)'
+        };
+
+        // Configuration commune pour les graphiques
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        font: {
+                            size: 13,
+                            weight: 'bold'
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.toLocaleString() + ' Dhs (' + context.dataset.percentages[context.dataIndex] + '%)';
+                            return label;
+                        }
+                    }
+                }
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true,
+                duration: 2000,
+                easing: 'easeInOutQuart'
+            }
+        };
+
+        // Graphique des Recettes avec couleurs de la Guinée
+        const recettesCtx = document.getElementById('recettesChart').getContext('2d');
+        new Chart(recettesCtx, {
+            type: 'pie',
+            data: {
+                labels: ['💳 Cotisations annuelles', '🎭 Journée Culturelle', '🎁 Dons'],
+                datasets: [{
+                    data: [6400, 6730, 900],
+                    percentages: ['45.6', '48.0', '6.4'],
+                    backgroundColor: [
+                        guineaColors.red,
+                        guineaColors.yellow,
+                        guineaColors.green
+                    ],
+                    borderWidth: 3,
+                    borderColor: '#fff',
+                    hoverOffset: 15,
+                    hoverBorderWidth: 4
+                }]
+            },
+            options: commonOptions
+        });
+
+        // Graphique des Dépenses avec couleurs de la Guinée
+        const depensesCtx = document.getElementById('depensesChart').getContext('2d');
+        new Chart(depensesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['🏖️ Sortie Saïdia', '📚 Livres JSC', '❤️ Aide sociale', '📋 Frais admin', '🤝 Réunions'],
+                datasets: [{
+                    data: [2079.5, 800, 700, 479, 45],
+                    percentages: ['50.7', '19.5', '17.1', '11.7', '1.1'],
+                    backgroundColor: [
+                        guineaColors.red,
+                        guineaColors.yellow,
+                        guineaColors.green,
+                        guineaColors.redLight,
+                        guineaColors.yellowLight
+                    ],
+                    borderWidth: 3,
+                    borderColor: '#fff',
+                    hoverOffset: 15,
+                    hoverBorderWidth: 4
+                }]
+            },
+            options: commonOptions
+        });
+
+        // Animation au scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Effet de compteur animé
+        function animateCounter(element) {
+            const target = parseInt(element.textContent.replace(/[^0-9]/g, ''));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString() + ' Dhs';
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString() + ' Dhs';
+                }
+            }, 16);
+        }
+
+        // Animer les montants au chargement
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.stat-card .amount').forEach(el => {
+                const originalText = el.textContent;
+                el.textContent = '0 Dhs';
+                setTimeout(() => {
+                    animateCounter(el);
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
