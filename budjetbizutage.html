@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Prévisionnel - Événement Riz ASEGUIM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.75), rgba(252, 209, 22, 0.75), rgba(0, 148, 96, 0.75));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .guinea-flag {
+            display: flex;
+            height: 6px;
+            margin: 15px auto;
+            max-width: 300px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .flag-red { background: #CE1126; flex: 1; }
+        .flag-yellow { background: #FCD116; flex: 1; }
+        .flag-green { background: #009460; flex: 1; }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .summary-card.total {
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.85), rgba(0, 148, 96, 0.85));
+            color: white;
+        }
+        
+        .summary-card h3 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        
+        .summary-card .amount {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #CE1126;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #CE1126, #FCD116, #009460) 1;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category {
+            margin-bottom: 30px;
+        }
+        
+        .category-header {
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.1), rgba(252, 209, 22, 0.1));
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-header:hover {
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.15), rgba(252, 209, 22, 0.15));
+            transform: translateX(5px);
+        }
+        
+        .category-header h3 {
+            color: #CE1126;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-total {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #009460;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: linear-gradient(135deg, rgba(206, 17, 38, 0.85), rgba(0, 148, 96, 0.85));
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85em;
+        }
+        
+        tbody tr:hover {
+            background: rgba(252, 209, 22, 0.1);
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin: 20px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .recommendation-card {
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid;
+        }
+        
+        .recommendation-card.success {
+            background: rgba(0, 148, 96, 0.1);
+            border-color: #009460;
+        }
+        
+        .recommendation-card.warning {
+            background: rgba(252, 209, 22, 0.1);
+            border-color: #FCD116;
+        }
+        
+        .recommendation-card.info {
+            background: rgba(206, 17, 38, 0.1);
+            border-color: #CE1126;
+        }
+        
+        .recommendation-card h4 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .recommendation-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .recommendation-card li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .recommendation-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #009460;
+            font-weight: bold;
+        }
+        
+        .print-btn {
+            background: linear-gradient(135deg, #CE1126, #009460);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(252, 209, 22, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #FCD116;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: #CE1126;
+            min-width: 80px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .print-btn {
+                display: none;
+            }
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍚 BUDGET PRÉVISIONNEL</h1>
+            <p>Événement Culinaire - Riz au Gras & Riz Maquillé</p>
+            <div class="guinea-flag">
+                <div class="flag-red"></div>
+                <div class="flag-yellow"></div>
+                <div class="flag-green"></div>
+            </div>
+            <p style="font-size: 1em; margin-top: 10px;">ASEGUIM OUJDA 🇬🇳</p>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">🖨️ Imprimer / Télécharger PDF</button>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h3>👥 Participants</h3>
+                <div class="amount">47</div>
+                <p style="margin-top: 10px; font-size: 0.9em;">45 riz au gras + 2-4 riz maquillé</p>
+            </div>
+            <div class="summary-card">
+                <h3>💰 Coût/Personne</h3>
+                <div class="amount">37 Dhs</div>
+                <p style="margin-top: 10px; font-size: 0.9em;">Prix très raisonnable</p>
+            </div>
+            <div class="summary-card total">
+                <h3>💎 Budget Total</h3>
+                <div class="amount">1 743 Dhs</div>
+                <p style="margin-top: 10px; font-size: 0.9em;">Toutes charges comprises</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛒 BUDGET DÉTAILLÉ PAR CATÉGORIE</h2>
+            
+            <div class="category">
+                <div class="category-header">
+                    <h3>🌾 A. Ingrédients Principaux</h3>
+                    <span class="category-total">272 Dhs</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Riz</td>
+                            <td>8-10 kg</td>
+                            <td>15 Dhs/kg</td>
+                            <td><strong>150 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Oignons</td>
+                            <td>2-3 kg</td>
+                            <td>8 Dhs/kg</td>
+                            <td><strong>25 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Tomates</td>
+                            <td>2 kg</td>
+                            <td>10 Dhs/kg</td>
+                            <td><strong>20 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Pommes de terre</td>
+                            <td>2 kg</td>
+                            <td>7 Dhs/kg</td>
+                            <td><strong>15 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Carottes</td>
+                            <td>1,5 kg</td>
+                            <td>10 Dhs/kg</td>
+                            <td><strong>15 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Moutarde</td>
+                            <td>200g</td>
+                            <td>25 Dhs</td>
+                            <td><strong>25 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ail</td>
+                            <td>500g</td>
+                            <td>30 Dhs/kg</td>
+                            <td><strong>15 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Persil</td>
+                            <td>2 bottes</td>
+                            <td>3 Dhs/botte</td>
+                            <td><strong>7 Dhs</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category">
+                <div class="category-header">
+                    <h3>🍗 B. Protéines</h3>
+                    <span class="category-total">560 Dhs</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Poulets</td>
+                            <td>8-10 poulets</td>
+                            <td>40 Dhs/poulet</td>
+                            <td><strong>400 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Viande (optionnel)</td>
+                            <td>2 kg</td>
+                            <td>80 Dhs/kg</td>
+                            <td><strong>160 Dhs</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category">
+                <div class="category-header">
+                    <h3>🌶️ C. Condiments & Épices</h3>
+                    <span class="category-total">104 Dhs</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Épices (mélange)</td>
+                            <td>Pack</td>
+                            <td>50 Dhs</td>
+                            <td><strong>50 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Sel</td>
+                            <td>500g</td>
+                            <td>2 Dhs</td>
+                            <td><strong>2 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Cube Maggi</td>
+                            <td>1 boîte</td>
+                            <td>30 Dhs</td>
+                            <td><strong>30 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Vinaigre</td>
+                            <td>1 bouteille</td>
+                            <td>12 Dhs</td>
+                            <td><strong>12 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Piment</td>
+                            <td>200g</td>
+                            <td>10 Dhs</td>
+                            <td><strong>10 Dhs</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category">
+                <div class="category-header">
+                    <h3>🫒 D. Huile & Matières Grasses</h3>
+                    <span class="category-total">75 Dhs</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Huile de cuisson</td>
+                            <td>3 litres</td>
+                            <td>25 Dhs/litre</td>
+                            <td><strong>75 Dhs</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category">
+                <div class="category-header">
+                    <h3>🥤 E. Boissons & Accompagnements</h3>
+                    <span class="category-total">97 Dhs</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jus</td>
+                            <td>10 litres</td>
+                            <td>5 Dhs/litre</td>
+                            <td><strong>50 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Eau</td>
+                            <td>2 packs</td>
+                            <td>20 Dhs/pack</td>
+                            <td><strong>40 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Concombre</td>
+                            <td>1 kg</td>
+                            <td>7 Dhs/kg</td>
+                            <td><strong>7 Dhs</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category">
+                <div class="category-header">
+                    <h3>🪑 F. Matériel & Logistique</h3>
+                    <span class="category-total">425 Dhs</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bouteille de gaz</td>
+                            <td>1</td>
+                            <td>65 Dhs</td>
+                            <td><strong>65 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Chaises (location)</td>
+                            <td>45</td>
+                            <td>5 Dhs/chaise</td>
+                            <td><strong>225 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Assiettes jetables</td>
+                            <td>50</td>
+                            <td>1 Dhs</td>
+                            <td><strong>50 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Gobelets jetables</td>
+                            <td>50</td>
+                            <td>0,5 Dhs</td>
+                            <td><strong>25 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Serviettes</td>
+                            <td>3 paquets</td>
+                            <td>10 Dhs</td>
+                            <td><strong>30 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Sacs poubelles</td>
+                            <td>1 rouleau</td>
+                            <td>20 Dhs</td>
+                            <td><strong>20 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Kleenex</td>
+                            <td>2 boîtes</td>
+                            <td>5 Dhs</td>
+                            <td><strong>10 Dhs</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="category">
+                <div class="category-header">
+                    <h3>🚗 G. Transport & Divers</h3>
+                    <span class="category-total">210 Dhs</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Transport courses</td>
+                            <td>Forfait</td>
+                            <td>50 Dhs</td>
+                            <td><strong>50 Dhs</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Imprévus (10%)</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><strong>160 Dhs</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💡 RECOMMANDATIONS & OPTIMISATIONS</h2>
+            <div class="recommendations">
+                <div class="recommendation-card success">
+                    <h4>✅ Optimisations Possibles</h4>
+                    <ul>
+                        <li>Acheter en gros au marché de gros</li>
+                        <li>Négocier avec fournisseurs habituels</li>
+                        <li>Emprunter matériel (économie 200-300 Dhs)</li>
+                        <li>Cuisiner en équipe pour partager efforts</li>
+                    </ul>
+                </div>
+                
+                <div class="recommendation-card warning">
+                    <h4>⚠️ Points de Vigilance</h4>
+                    <ul>
+                        <li>Vérifier allergies alimentaires</li>
+                        <li>Prévoir marge 10% pour retardataires</li>
+                        <li>Acheter denrées périssables la veille</li>
+                        <li>Confirmer disponibilité du gaz</li>
+                    </ul>
+                </div>
+                
+                <div class="recommendation-card info">
+                    <h4>💰 Sources de Financement</h4>
+                    <ul>
+                        <li>Cotisations: 40-50 Dhs/personne</li>
+                        <li>Subvention section: 500 Dhs</li>
+                        <li>Sponsoring à rechercher</li>
+                        <li>Total attendu: 1 880 - 2 350 Dhs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📅 PLANNING D'ACHAT</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">📆 J-3</div>
+                    <div>
+                        <strong>Matériel non périssable</strong><br>
+                        Épices, huile, cube Maggi, matériel jetable, chaises
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">📆 J-1</div>
+                    <div>
+                        <strong>Denrées principales</strong><br>
+                        Légumes, poulets, riz, boissons
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">📆 Jour J</div>
+                    <div>
+                        <strong>Condiments frais</strong><br>
+                        Persil, concombre, derniers ajustements
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📞 RESPONSABILITÉS</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tâche</th>
+                        <th>Responsable</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Achats ingrédients</td>
+                        <td>[À désigner]</td>
+                        <td>⏳ En attente</td>
+                    </tr>
+                    <tr>
+                        <td>Location matériel</td>
+                        <td>[À désigner]</td>
+                        <td>⏳ En attente</td>
+                    </tr>
+                    <tr>
+                        <td>Cuisson</td>
+                        <td>[À désigner]</td>
+                        <td>⏳ En attente</td>
+                    </tr>
+                    <tr>
+                        <td>Gestion finances</td>
+                        <td>CAC - Mamadou Ciré DIALLO</td>
+                        <td>✅ Validé</td>
+                    </tr>
+                    <tr>
+                        <td>Coordination générale</td>
+                        <td>[À désigner]</td>
+                        <td>⏳ En attente</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" style="text-align: center; background: linear-gradient(135deg, rgba(206, 17, 38, 0.05), rgba(0, 148, 96, 0.05));">
+            <h2 style="border: none;">🇬🇳 CERTIFICATION</h2>
+            <p style="margin: 20px 0; line-height: 1.8;">
+                <strong>Document préparé par :</strong> MAMADOU CIRE DIALLO<br>
+                <strong>Fonction :</strong> Commissaire aux Comptes<br>
+                <strong>Section :</strong> ASEGUIM OUJDA<br>
+                <strong>Contact :</strong> aseguimoujda224@gmail.com
+            </p>
+            <div class="guinea-flag" style="margin: 20px auto;"></div>
+            <p style="font-size: 0.9em; opacity: 0.8;">
+                Ce budget est prévisionnel et peut être ajusté selon les prix du marché et les besoins réels.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
